@@ -1,0 +1,76 @@
+{% extends 'home/base.html' %}
+{% import 'ui/resources_page.html'as my_resources_page %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block css %}
+<style>
+    .col-md-12, .col-md-9{
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'home/menu.html' %}
+<div class="col-md-9">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;我的资源</h3>
+        </div>
+        <div class="panel-body">
+            <div style="background-color: #fff;height: 100%;margin: 0px 0px 10px 0px;padding:10px;border-radius: 5px">
+                <ul class="nav nav-pills">
+                   <li><a>分类 : </a></li>
+                   <li class="{% if category=="" %}active{% endif %}"><a href="{{ url_for('home.my_resources',page=1) }}" style="border-radius: 30%">不限</a></li>
+                   <li class="{% if category=="2" %}active{% endif %}"><a href="{{ url_for('home.my_resources',page=1) }}?category=2" style="border-radius: 30%">电影</a></li>
+                   <li class="{% if category=="3" %}active{% endif %}"><a href="{{ url_for('home.my_resources',page=1) }}?category=3" style="border-radius: 30%">IT资源</a></li>
+                </ul>
+                <!-- 内容开始-->
+                <div class="active tab-pane" id="activity">
+                {% for rs in page_data.items %}
+                    <!-- Post -->
+                    <div class="post" style="border-bottom: dotted 0.5px;padding: 30px 0px">
+                      <div class="user-block">
+                        <img class="img-circle img-bordered-sm" src="{{ url_for("static",filename="uploads/users/"+rs.user.face) }}" alt="user image">
+                            <span class="username">
+                                <a href="#">{{ rs.user.name }}</a>&nbsp;&nbsp;&nbsp;
+                                <a href="{{ url_for('home.my_resources_edit') }}?id={{ rs.id }}" class="pull-right btn-box-tool"><i class="fa fa-chain-broken">&nbsp;&nbsp;&nbsp;修改</i></a>
+                            </span>
+                        <span class="description">Shared publicly - {{ rs.addtime }}</span>
+                      </div>
+                      <!-- /.user-block -->
+                      <p>
+                        &nbsp;&nbsp;&nbsp;{{ rs.title }}
+                      </p>
+                      <div class="row">
+                          {% if rs.img_url %}
+                          {% for img in rs.img_url.split(",") %}
+                          <div class="col-sm-4 col-md-3">
+                              <a href="#" class="thumbnail">
+                                 <img src="{{ url_for('static',filename='uploads/resources/'+img) }}" width="100%" height="100%">
+                              </a>
+                          </div>
+                          {% endfor %}
+                          {% endif %}
+                      </div>
+                      <span>{{ rs.link.name }}下载地址</span>&nbsp;&nbsp;:&nbsp;&nbsp;<a href="{{ rs.url }}">{{ rs.url }}</a>&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <!-- /.post -->
+                {% endfor %}
+                </div>
+            </div>
+            <div class="clearfix text-center" >
+                {{ my_resources_page.page(page_data,"home.my_resources",category) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#m-4").addClass("active");
+    });
+</script>
+{% endblock %}

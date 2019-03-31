@@ -1,0 +1,16 @@
+<div class="col-md-3">
+    <div class="list-group">
+        <a id="m-1" href="{{ url_for('home.user') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-tags"></span>&nbsp;基本信息
+        </a>
+         <a id="m-2" href="{{ url_for('home.pwd') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-lock"></span>&nbsp;修改密码
+        </a>
+        <a id="m-3" href="{{ url_for('home.focus_user') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-user"></span>&nbsp;关注会员
+        </a>
+        <a id="m-4" href="{{ url_for('home.my_resources',page=1) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-calendar"></span>&nbsp;我的资源
+        </a>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+{% extends 'home/base.html' %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block css %}
+<style>
+    .col-md-12, .col-md-9{
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'home/menu.html' %}
+<div class="col-md-9">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;关注会员</h3>
+        </div>
+        <div class="panel-body">
+            <div class="box-body no-padding">
+                  <ul class="users-list clearfix">
+                      {% for user in users %}
+                       <li>
+                           <img src="{{ url_for('static',filename='uploads/users/'+user.face) }}" alt="User Image">
+                           <a class="users-list-name" href="">{{ user.name }}</a>
+                           <span class="label label-warning" onclick="unAttention({{ user.id }},'/focus_user/')" style="cursor: pointer">取消关注</span>
+                       </li>
+                      {% endfor %}
+                  </ul>
+                  <!-- /.users-list -->
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#m-3").addClass("active");
+    });
+</script>
+<script src="{{ url_for('static',filename='js/isAttentions.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'home/base.html' %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block css %}
+<style>
+    .col-md-12, .col-md-9{
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'home/menu.html' %}
+<div class="col-md-9">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;基本信息</h3>
+        </div>
+        <div class="panel-body">
+            {% for msg in get_flashed_messages(category_filter="err") %}
+                <p style="color: red">{{ msg }}</p>
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter="ok") %}
+                <p style="color: green">{{ msg }}</p>
+            {% endfor %}
+            <form role="form" method="post" enctype="multipart/form-data">
+                <fieldset>
+                        <div class="form-group">
+                            <label for="input_name"><span class="glyphicon glyphicon-user"></span>&nbsp;{{ form.name.label }}</label>
+                            {{ form.name }}
+                        </div>
+                        {% for err in form.name.errors %}
+                             <div class="col-md-12">
+                                 <font style="color: red;">{{ err }}</font>
+                             </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="input_email"><span class="glyphicon glyphicon-envelope"></span>&nbsp;{{ form.email.label }}</label>
+                            {{ form.email }}
+                        </div>
+                        {% for err in form.email.errors %}
+                             <div class="col-md-12">
+                                 <font style="color: red;">{{ err }}</font>
+                             </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="input_phone"><span class="glyphicon glyphicon-phone"></span>&nbsp;{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                        </div>
+                        {% for err in form.phone.errors %}
+                             <div class="col-md-12">
+                                 <font style="color: red;">{{ err }}</font>
+                             </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="input_face"><span class="glyphicon glyphicon-picture"></span>&nbsp;{{ form.face.label }}</label>
+                            {{ form.face }}
+                            {% if user.face %}
+                                <img src="{{ url_for('static',filename="uploads/users/"+user.face) }}" width="100px" height="70px" class="img-responsive img-rounded">
+                            {% else %}
+                            {% endif %}
+                        </div>
+                        {% for err in form.face.errors %}
+                             <div class="col-md-12">
+                                 <font style="color: red;">{{ err }}</font>
+                             </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="input_info"><span class="glyphicon glyphicon-edit"></span>&nbsp;{{ form.info.label }}</label>
+                            {{ form.info }}
+                        </div>
+                        {% for err in form.info.errors %}
+                             <div class="col-md-12">
+                                 <font style="color: red;">{{ err }}</font>
+                             </div>
+                        {% endfor %}
+                        {{ form.submit }}
+                        {{ form.csrf_token }}
+                    </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#m-1").addClass("active");
+    });
+</script>
+{% endblock %}

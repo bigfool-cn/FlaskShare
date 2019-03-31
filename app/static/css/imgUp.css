@@ -1,0 +1,74 @@
+.content-resize{
+    resize: none;
+    border-radius: 3px!important;
+}
+.bgcl-radius-3{
+    background-color: white!important;
+    border-radius: 3px!important;
+}
+.section {
+	width: 1200px;
+	margin: 200px auto;
+}
+.article {
+	border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+    min-height: 155px;
+}
+.item {
+    width: 150px;
+    height: 110px;
+    float: left;
+	position: relative;
+	margin: 10px 60px;
+}
+.addImg {
+	width: 150px;
+	height: 110px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+.preview,.preBlock{
+	position: absolute;
+    display: block;
+	width: 150px;
+	height: 110px;
+	left: 0;
+	top: 0;
+}
+.delete {
+    width: 30px;
+	position: absolute;
+	right: -30px;
+	top: -15px;
+	cursor: pointer;
+	display: none;
+}
+.preBlock img {
+    display: block;
+	width: 150px;
+	height: 110px;
+}
+.upload_input{
+  display: block;
+  width: 0;
+  height: 0;
+  -webkit-opacity: 0.0;
+  /* Netscape and Older than Firefox 0.9 */
+  -moz-opacity: 0.0;
+  /* Safari 1.x (pre WebKit!) 老式khtml内核的Safari浏览器*/
+  -khtml-opacity: 0.0;
+  /* IE9 + etc...modern browsers */
+  opacity: .0;
+  /* IE 4-9 */
+  filter:alpha(opacity=0);
+  /*This works in IE 8 & 9 too*/
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  /*IE4-IE9*/
+  filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}

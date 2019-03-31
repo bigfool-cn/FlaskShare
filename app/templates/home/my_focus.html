@@ -1,0 +1,79 @@
+{% extends 'home/base.html' %}
+{% block title %}
+    我的关注
+{% endblock %}
+{% block content %}
+    <div style="background-color: #fff;height: 100%;margin: 0px 0px 10px 0px;padding:10px;border-radius: 5px">
+        <ul class="nav nav-pills">
+           <li><a>分类 : </a></li>
+           <li class="{% if category=="" %}active{% endif %}"><a href="{{ url_for('home.my_focus') }}" style="border-radius: 30%">不限</a></li>
+           <li class="{% if category=="2" %}active{% endif %}"><a href="{{ url_for('home.my_focus') }}?category=2" style="border-radius: 30%">电影</a></li>
+           <li class="{% if category=="3" %}active{% endif %}"><a href="{{ url_for('home.my_focus') }}?category=3" style="border-radius: 30%">IT资源</a></li>
+        </ul>
+        <!-- 内容开始-->
+        <div class="active tab-pane" id="activity">
+        {% for rs in resources%}
+            <!-- Post -->
+            <div class="post" style="border-bottom: dotted 0.5px;padding: 30px 0px">
+              <div class="user-block">
+                <img class="img-circle img-bordered-sm" src="{{ url_for("static",filename="uploads/users/"+rs.user.face) }}" alt="user image">
+                    <span class="username">
+                      <a href="#">{{ rs.user.name }}</a>&nbsp;&nbsp;&nbsp;<span class="label label-warning" id="{{ rs.id }}" onclick="unAttention({{ rs.user.id,'/my_focus/' }})" style="cursor: pointer">取消关注</span>
+                      <a href="#" class="pull-right btn-box-tool"><i class="fa fa-chain-broken">&nbsp;&nbsp;&nbsp;{{ rs.tag.name }}</i></a>
+                    </span>
+                <span class="description">Shared publicly - {{ rs.addtime }}</span>
+              </div>
+              <!-- /.user-block -->
+              <p>
+                &nbsp;&nbsp;&nbsp;{{ rs.title }}
+              </p>
+              <div class="row">
+                  {% if rs.img_url %}
+                  {% for img in rs.img_url.split(",") %}
+                  <div class="col-sm-4 col-md-3">
+                      <a href="#" class="thumbnail">
+                         <img src="{{ url_for('static',filename='uploads/resources/'+img) }}" width="100%" height="100%">
+                      </a>
+                  </div>
+                  {% endfor %}
+                  {% endif %}
+              </div>
+              <span>{{ rs.link.name }}下载地址</span>&nbsp;&nbsp;:&nbsp;&nbsp;<a href="{{ rs.url }}">{{ rs.url }}</a>&nbsp;&nbsp;&nbsp;
+              <button class="btn btn-warning" data-toggle="modal" data-target="#myModal_{{ rs.id }}">报错</button>
+              <div class="modal fade" id="myModal_{{ rs.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">报错信息</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="url-info" value="链接失效">链接失效
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="url-info" value="链接资源不符合">链接资源不符合
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="postError({{ rs.id }})" data-dismiss="modal">提交</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div>
+              </div>
+            </div>
+            <!-- /.post -->
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#tag1-2").addClass("active");
+    });
+</script>
+<script src="{{ url_for('static',filename='js/isAttentions.js') }}"></script>
+{% endblock %}

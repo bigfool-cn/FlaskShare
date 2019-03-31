@@ -1,0 +1,165 @@
+{% extends 'home/base.html' %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block css %}
+<link href="{{ url_for("static",filename="css/imgUp.css") }}" rel="stylesheet">
+<style>
+    .col-md-12, .col-md-9{
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'home/menu.html' %}
+<div class="col-md-9">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;修改资源</h3>
+        </div>
+        <div class="panel-body">
+            {% for msg in get_flashed_messages(category_filter="ok") %}
+            <div class="alert alert-success alert-dismissible text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i> 修改成功!</h4>
+            </div>
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter="err") %}
+            <div class="alert alert-danger alert-dismissible text-center">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-ban"></i> 修改失败!</h4>
+            </div>
+            {% endfor %}
+           <form role="form" method="post" action="{{ url_for('home.my_resources_edit') }}" enctype="multipart/form-data" onsubmit="return validForm(this)">
+               <input type="hidden" value="{{ resource.id }}" name="rs-id">
+               <div class="form-group">
+                    <textarea class="form-control content-resize bgcl-radius-3" id="content" name="title" row="2" placeholder="说点什么...">{{ resource.title }}</textarea>
+                </div>
+                <div class="form-group input-group">
+                    <span class="input-group-btn">
+                        <select class="btn btn-default bgcl-radius-3" id="rs-schema" name="rs-type">
+                            <option value="1">- -选择- -</option>
+                            <option value="2" {% if resource.tag_id==2 %}selected{% endif %}>电影</option>
+                            <option value="3" {% if resource.tag_id==3 %}selected{% endif %}>IT资源</option>
+                        </select>
+                    </span>
+                    <span class="input-group-btn">
+                         <select class="btn btn-default bgcl-radius-3" id="rs-schema" name="url-type" >
+                             <option value="1">- -选择- -</option>
+                             <option value="2" {% if resource.tag_id==2 %}selected{% endif %}>迅雷磁力</option>
+                             <option value="3" {% if resource.tag_id==3 %}selected{% endif %}>百度网盘</option>
+                             <option value="4" {% if resource.tag_id==4 %}selected{% endif %}>腾讯微盘</option>
+                             <option value="5" {% if resource.tag_id==5 %}selected{% endif %}>新浪微盘</option>
+                         </select>
+                    </span>
+                    <input type="text" class="form-control bgcl-radius-3" name="download-url" value="{{ resource.url }}">
+                </div>
+                <div class="article">
+                    <div style="float: left;margin: 10px 30px">
+                        <img id="preview1" name="pic" width="150" height="110" src="{% if url_count>0 %}{{ url_for('static',filename='uploads/resources/'+img_url[0]) }}{% endif %}" />
+                        <br />
+                        <input type="file" name="img_url_1" id="img_url_1" onchange="imgPreview(this,'preview1','img_url_1')" />
+                    </div>
+                    <div style="float: left;margin: 10px 30px">
+                        <img id="preview2" name="pic" width="150" height="110" src="{% if url_count>1 %}{{ url_for('static',filename='uploads/resources/'+img_url[1]) }}{% endif %}" />
+                        <br />
+                        <input type="file" name="img_url_2" id="img_url_2" onchange="imgPreview(this,'preview2','img_url_2')" />
+                    </div>
+                    <div style="float: left;margin: 10px 30px">
+                        <img id="preview3" name="pic" width="150" height="110" src="{% if url_count>2 %}{{ url_for('static',filename='uploads/resources/'+img_url[2]) }}{% endif %}" />
+                        <br />
+                        <input type="file" name="img_url_3" id="img_url_3" onchange="imgPreview(this,'preview3','img_url_3')" />
+                    </div>
+                    <div style="float: left;margin: 10px 30px">
+                        <img id="preview4" name="pic" width="150" height="110" src="{% if url_count>3 %}{{ url_for('static',filename='uploads/resources/'+img_url[3]) }}{% endif %}" />
+                        <br />
+                        <input type="file" name="img_url_4" id="img_url_4" onchange="imgPreview(this,'preview4','img_url_4')" />
+                    </div>
+                    <div style="clear: left;"></div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary btn-lg btn-block" value="提交">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("#m-4").addClass("active");
+    });
+</script>
+<script type="text/javascript">
+    function imgPreview(fileDom,id,inp_id){
+        //判断是否支持FileReader
+        if (window.FileReader) {
+            var reader = new FileReader();
+        } else {
+            alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+        }
+
+        //获取文件
+        var file = fileDom.files[0];
+        var ext = fileDom.value.substring(fileDom.value.lastIndexOf(".")+1).toLowerCase();
+        var inp_id = inp_id;
+        // gif在IE浏览器暂时无法显示
+        if(ext!='png'&&ext!='jpg'&&ext!='jpeg'){
+            if (ext != '') {
+                alert("图片的格式必须为png或者jpg或者jpeg格式！");
+            }
+            input_file = $("#"+inp_id);
+            input_file.after(input_file.clone().val(""));
+            input_file.remove();
+            return;
+        }else{
+           if(((fileDom.files[0].size).toFixed(2))>=(2*1024*1024)){
+               alert("请上传小于2M的图片");
+               input_file = $("#"+inp_id);
+               input_file.after(input_file.clone().val(""));
+               input_file.remove();
+               return;
+           }
+        }
+        //读取完成
+        reader.onload = function(e) {
+            //获取图片dom
+            var img = document.getElementById(id);
+            //图片路径设置为读取的图片
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+<script>
+    function validForm() {
+        content = $("#content").val();
+        rs_type = $("#rs-schema").val();
+        url_type = $("#url-schema").val();
+        download_url = $("#download-url").val();
+        if (content == ""){
+            $("#content").css('border-color','red');
+            alert("请输入内容");
+            return false;
+        }
+        if (rs_type == 1){
+            $("#rs-schema").css('border-color','red');
+            alert("请选择资源类型");
+            return false;
+        }
+        if (url_type == 1){
+            $("#url-schema").css('border-color','red');
+            alert("请选择链接类型");
+            return false;
+        }
+        if (download_url == ""){
+            $("#download-url").css('border-color','red');
+            alert("请输入资源链接");
+            return false;
+        }
+    }
+</script>
+<script src="{{ url_for('static',filename='js/imgUp.js') }}"></script>
+{% endblock %}
